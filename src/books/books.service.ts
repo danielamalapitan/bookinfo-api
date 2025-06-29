@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException} from '@nestjs/common';
 import { BookDto } from './dto/book.dto';
 import { Book } from './entities/books.entity';
+import { AuthorBookService } from 'src/author-book/author-book.service';
 
 @Injectable()
 export class BooksService {
@@ -47,7 +48,18 @@ export class BooksService {
   update(id: number, updateDto: BookDto){
     const index = this.books.findIndex((b) => b.id === id);
     if (index === -1) throw new NotFoundException(`Book with id ${id} not found`);
-    
+
+    // Check for duplicate title in other books (exclude current book)
+  const isDuplicate = this.books.some(
+    (book) =>
+      book.id !== id &&
+      book.title.toLowerCase() === updateDto.title.toLowerCase()
+  );
+
+  if (isDuplicate) {
+    throw new BadRequestException('Another book with the same title already exists.');
+  }
+
     /*{ id, ...updateDto }*/
     const updatedBook: Book = { 
       id, 
@@ -68,7 +80,9 @@ export class BooksService {
     this.books.splice(index, 1);
     return deleted;
   }
-
+  
+  
+ 
 }
 
 

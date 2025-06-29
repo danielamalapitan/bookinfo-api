@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Put, Delete, NotFoundException, UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Put, Delete, NotFoundException, UseFilters, UsePipes, ValidationPipe, ParseIntPipe } from '@nestjs/common';
 import { AuthorsService } from './authors.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { Author } from './entities/author.entity';
@@ -8,6 +8,7 @@ import { HttpExceptionFilter } from 'src/common/filters/http-exception.filter';
 @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
 @Controller('authors')
 export class AuthorsController {
+
   constructor(private readonly authorsService: AuthorsService) {}
 
   @Post()
@@ -34,8 +35,10 @@ export class AuthorsController {
     return this.authorsService.update(+id, dto);
   }
 
+  /*
   @Delete(':id')
   remove(@Param('id') id: string): void {
     return this.authorsService.remove(+id);
   }
+  */
 }

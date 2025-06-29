@@ -1,7 +1,13 @@
-import { IsString, IsDate, IsIn} from 'class-validator';
+import { IsString, IsDate, IsEnum} from 'class-validator';
 import { Type, Transform } from 'class-transformer'
 
-const allowedGenres = ['fiction', 'novel', 'mystery', 'science-fiction', 'non-fiction'];
+export enum allowedGenres{
+    FICTION = 'fiction',
+    NOVEL = 'novel',
+    MYSTERY = 'mystery',
+    SCIENCE_FICTION = 'science fiction',
+    NON_FICTION = ' non-fiction',
+}
 
 export class BookDto{
     @IsString()
@@ -16,9 +22,9 @@ export class BookDto{
 
     @IsString()
     @Transform(({ value }) => value.toLowerCase())
-    @IsIn(allowedGenres, {
-    message: `Genre must be one of: ${allowedGenres.join(', ')}`
+    @IsEnum(allowedGenres, {
+    message: `Genre must be one of: ${Object.values(allowedGenres).join(', ')}`
     })
-    genre: string;
+    genre: allowedGenres;
 
 }

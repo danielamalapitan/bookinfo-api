@@ -7,7 +7,8 @@ import { AuthorsModule } from 'src/authors/authors.module';
 @Module({
   imports:[AuthorsModule,BooksModule],
   providers: [AuthorBookService],
-  controllers: [AuthorBookController]
+  controllers: [AuthorBookController],
+  exports: [AuthorBookService]
 })
 export class AuthorBookModule {}
 

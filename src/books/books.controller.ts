@@ -29,9 +29,10 @@ export class BooksController {
         return this.booksService.update(+id, updateDto);
     }
 
+    /*
     @Delete(':id')
     remove(@Param('id') id: string) {
         return this.booksService.remove(+id);
     }
-
+    */
 }

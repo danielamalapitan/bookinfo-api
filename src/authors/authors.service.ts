@@ -2,6 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { Author } from './entities/author.entity'
 
+
 @Injectable()
 export class AuthorsService {
   
@@ -40,14 +41,36 @@ export class AuthorsService {
   update(id: number, dto: CreateAuthorDto): Author | null {
     const index = this.authors.findIndex(author => author.id === id);
     if (index === -1) return null;
+
+const isDuplicate = this.authors.some(
+    (author) =>
+      author.id !== id &&
+      author.name.toLowerCase() === dto.name.toLowerCase()
+  );
+
+  if (isDuplicate) {
+    throw new BadRequestException('Another author with the same name already exists.');
+  }
+
     this.authors[index] = { id, ...dto };
     return this.authors[index];
   }
 
-    /*DELETE*/
-  remove(id: number): void {
+    /*DELETE
+     remove(id: number): void {
     this.authors = this.authors.filter(author => author.id !== id);
-  }
+}
+  */
+remove(id: number): boolean {
+  const index = this.authors.findIndex(author => author.id === id);
+  if (index === -1) return false;
+  this.authors.splice(index, 1);
+  return true;
+}
+
+  
+
+  
 }
 
 
